@@ -224,7 +224,8 @@ class MainWindow(QMainWindow):
         if ok and name:
             if name not in functionForSave.GetListOfSave(self.currentProfile()):
                 if functionForSave.ImportSave(name, self.currentProfile()):
-                    self.listwidget.addItem(name)
+                    self.listwidget.clear()
+                    self.listwidget.addItems(functionForSave.GetListOfSave(self.currentProfile()))
                     self.showMessage(f"{name} has been successfully imported")
                 else:
                     self.showMessage("Failed to import save", "red")
@@ -239,8 +240,9 @@ class MainWindow(QMainWindow):
         newName, ok = QInputDialog.getText(self, "Duplicate Savestate", "Enter name:", text=oldName)
         if ok and newName:
             if newName not in functionForSave.GetListOfSave(self.currentProfile()):
-                if functionForSave.DuplicateSave(oldName, newName, self.currentProfile()):
-                    self.listwidget.addItem(newName)
+                if functionForSave.DuplicateSave(oldName, newName, self.currentProfile()):                  
+                    self.listwidget.clear()
+                    self.listwidget.addItems(functionForSave.GetListOfSave(self.currentProfile()))
                     self.showMessage(f"{oldName} has been duplicated as: {newName}")
             else:
                 self.showMessage("Savestate already exists", "red")
