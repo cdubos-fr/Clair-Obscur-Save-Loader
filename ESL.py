@@ -153,12 +153,15 @@ class MainWindow(QMainWindow):
     def CreateProfile(self):
         name, ok = QInputDialog.getText(self, "Create Profile", "Enter name:", text="new Profile")
         if ok and name:
-            if name not in functionForSave.GetListOfProfile():
-                functionForSave.CreateProfile(name)
-                self.qcombo.addItem(name)
-                self.qcombo.setCurrentText(name)
-                self.profileSelect()
-                self.showMessage(f"{name} has been successfully created")
+            if name not in functionForSave.GetListOfProfile() :
+                if "/" in name or "\\" in name:
+                    self.showMessage(f"you can't use / or \\ in the name", "red")
+                else :
+                    functionForSave.CreateProfile(name)
+                    self.qcombo.addItem(name)
+                    self.qcombo.setCurrentText(name)
+                    self.profileSelect()
+                    self.showMessage(f"{name} has been successfully created")
             else:
                 self.showMessage(f"{name} already exists", "red")
 
@@ -181,9 +184,12 @@ class MainWindow(QMainWindow):
         newName, ok = QInputDialog.getText(self, "Rename Profile", "Enter new name:", text=oldName)
         if ok and newName:
             if newName not in functionForSave.GetListOfProfile():
-                functionForSave.RenameProfile(oldName, newName)
-                self.qcombo.setItemText(self.qcombo.currentIndex(), newName)
-                self.showMessage("Profile has been renamed")
+                if "/" in newName or "\\" in newName:
+                    self.showMessage(f"you can't use / or \\ in the name", "red")
+                else:
+                    functionForSave.RenameProfile(oldName, newName)
+                    self.qcombo.setItemText(self.qcombo.currentIndex(), newName)
+                    self.showMessage("Profile has been renamed")
             else:
                 self.showMessage("Profile already exists", "red")
 
@@ -195,11 +201,14 @@ class MainWindow(QMainWindow):
         newName, ok = QInputDialog.getText(self, "Duplicate Profile", "Enter name:", text=oldName)
         if ok and newName:
             if newName not in functionForSave.GetListOfProfile():
-                functionForSave.DuplicateProfile(oldName, newName)
-                self.qcombo.addItem(newName)
-                self.qcombo.setCurrentText(newName)
-                self.profileSelect()
-                self.showMessage(f"{oldName} has been duplicated as: {newName}")
+                if "/" in newName or "\\" in newName:
+                    self.showMessage(f"you can't use / or \\ in the name", "red")
+                else:
+                    functionForSave.DuplicateProfile(oldName, newName)
+                    self.qcombo.addItem(newName)
+                    self.qcombo.setCurrentText(newName)
+                    self.profileSelect()
+                    self.showMessage(f"{oldName} has been duplicated as: {newName}")
             else:
                 self.showMessage("Profile already exists", "red")
 
@@ -223,12 +232,15 @@ class MainWindow(QMainWindow):
         name, ok = QInputDialog.getText(self, "Import Savestate", "Enter name:", text="new save")
         if ok and name:
             if name not in functionForSave.GetListOfSave(self.currentProfile()):
-                if functionForSave.ImportSave(name, self.currentProfile()):
-                    self.listwidget.clear()
-                    self.listwidget.addItems(functionForSave.GetListOfSave(self.currentProfile()))
-                    self.showMessage(f"{name} has been successfully imported")
+                if "/" in name or "\\" in name:
+                    self.showMessage(f"you can't use / or \\ in the name", "red")
                 else:
-                    self.showMessage("Failed to import save", "red")
+                    if functionForSave.ImportSave(name, self.currentProfile()):
+                        self.listwidget.clear()
+                        self.listwidget.addItems(functionForSave.GetListOfSave(self.currentProfile()))
+                        self.showMessage(f"{name} has been successfully imported")
+                    else:
+                        self.showMessage("Failed to import save", "red")
             else:
                 self.showMessage("Savestate already exists", "red")
 
@@ -240,10 +252,13 @@ class MainWindow(QMainWindow):
         newName, ok = QInputDialog.getText(self, "Duplicate Savestate", "Enter name:", text=oldName)
         if ok and newName:
             if newName not in functionForSave.GetListOfSave(self.currentProfile()):
-                if functionForSave.DuplicateSave(oldName, newName, self.currentProfile()):                  
-                    self.listwidget.clear()
-                    self.listwidget.addItems(functionForSave.GetListOfSave(self.currentProfile()))
-                    self.showMessage(f"{oldName} has been duplicated as: {newName}")
+                if "/" in newName or "\\" in newName:
+                    self.showMessage(f"you can't use / or \\ in the name", "red")
+                else:
+                    if functionForSave.DuplicateSave(oldName, newName, self.currentProfile()):                  
+                        self.listwidget.clear()
+                        self.listwidget.addItems(functionForSave.GetListOfSave(self.currentProfile()))
+                        self.showMessage(f"{oldName} has been duplicated as: {newName}")
             else:
                 self.showMessage("Savestate already exists", "red")
 
@@ -264,9 +279,12 @@ class MainWindow(QMainWindow):
         newName, ok = QInputDialog.getText(self, "Rename Savestate", "Enter new name:", text=oldName)
         if ok and newName:
             if newName not in functionForSave.GetListOfSave(self.currentProfile()):
-                if functionForSave.RenameSave(oldName, newName, self.currentProfile()):
-                    item.setText(newName)
-                    self.showMessage("Savestate has been renamed")
+                if "/" in newName or "\\" in newName:
+                    self.showMessage(f"you can't use / or \\ in the name", "red")
+                else:
+                    if functionForSave.RenameSave(oldName, newName, self.currentProfile()):
+                        item.setText(newName)
+                        self.showMessage("Savestate has been renamed")
             else:
                 self.showMessage("Savestate already exists", "red")
 
@@ -281,29 +299,6 @@ class MainWindow(QMainWindow):
         else:
             self.showMessage("Select a savestate to be updated", "red")
     
-    def ImportExternal(self):
-        if not self.profileSelected():
-            self.showMessage("Select a profile first", "red")
-            return
-        folder = QFileDialog.getExistingDirectory(self, 'Select a Folder')
-        folderIsCorrect = False
-        if folder:
-            saveName = folder.split("/")[-1]
-            for i in os.listdir(folder):
-                if i.endswith("sav"):
-                    folderIsCorrect = True
-            if folderIsCorrect:
-                saveName, ok = QInputDialog.getText(self, "Choose a Name for imported Save", "Choose Name:", text=saveName)
-                if saveName not in functionForSave.GetListOfSave(self.currentProfile()):
-                    functionForSave.ImportExternalSave(self.currentProfile(),folder,saveName)
-                    self.showMessage(saveName +" has been imported")
-                    self.listwidget.addItem(saveName)
-                else:
-                    self.showMessage("Savestate already exists", "red")     
-            else:
-                self.showMessage('Folder is not a savefile')
-        else:
-            self.showMessage('No folder selected')
 
     # ---------- Context Menu ----------
 
