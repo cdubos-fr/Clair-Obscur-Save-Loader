@@ -85,8 +85,14 @@ def DeleteProfile(Profile):
     for root,dirs,files in os.walk(RemovedprofilePath):
         os.chmod(root,stat.S_IWUSR)
         for d in dirs:
-            dirsPath = RemovedprofilePath + "/" + d
-            os.chmod(dirsPath,stat.S_IWUSR)
+            if d== "Backup":
+                pass
+            else:
+                dirsPath = RemovedprofilePath + "/" + d
+                for i in os.listdir(dirsPath):
+                    if i=="Backup":
+                        os.chmod(dirsPath+"/"+i,stat.S_IWUSR)
+                os.chmod(dirsPath,stat.S_IWUSR)
     shutil.rmtree(RemovedprofilePath)
     return True
 
