@@ -52,15 +52,26 @@ def RenameSave(OldName,NewName,Profile):
 def LoadSave(Name,Profile):
     if Profile == "":
         return False
-    LoadedSavePath = AllSavePath +"/"+Profile+"/"+Name
+
+    LoadedSavePath = os.path.join(AllSavePath, Profile, Name)
+
     if os.path.exists(CurrentSavePath):
         for i in os.listdir(CurrentSavePath):
-            if i=="Backup":
-                for j in os.listdir(CurrentSavePath +"/"+i):
-                   os.remove(CurrentSavePath +"/"+i+"/"+j) 
+            item_path = os.path.join(CurrentSavePath, i)
+            if i == "Backup":
+                for j in os.listdir(item_path):
+                    os.remove(os.path.join(item_path, j))
             else:
-                os.remove(CurrentSavePath +"/"+i)
-    shutil.copytree(LoadedSavePath,CurrentSavePath,dirs_exist_ok=True)
+                if os.path.isfile(item_path) or os.path.islink(item_path):
+                    os.remove(item_path)
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+
+    try:
+        shutil.copytree(LoadedSavePath,CurrentSavePath,dirs_exist_ok=True)
+    except Exception:
+        return False
+
     return True
 
 def GetListOfSave(Profile):
