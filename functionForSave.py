@@ -1,70 +1,73 @@
 import os
 import shutil
 import stat
-folderLocation = os.getenv('LOCALAPPDATA') + "/Sandfall/Saved/SaveGames"
-AllSavePath = folderLocation + "/Save"
-os.makedirs(AllSavePath,exist_ok=True)
-for i in os.listdir(folderLocation) :
+
+folderLocation = os.path.join(os.getenv('LOCALAPPDATA'), "Sandfall", "Saved", "SaveGames")
+AllSavePath = os.path.join(folderLocation, "Save")
+os.makedirs(AllSavePath, exist_ok=True)
+
+for i in os.listdir(folderLocation):
     if i.isdigit():
-        CurrentSavePath = folderLocation+"/"+i
+        CurrentSavePath = os.path.join(folderLocation, i)
         break
 
 def GetSavePath(Profile):
-    return AllSavePath +"/"+Profile
+    return os.path.join(AllSavePath, Profile)
 
-def ImportSave(Name,Profile):
+def ImportSave(Name, Profile):
     if Profile == "":
         return False
-    NewSavePath = AllSavePath +"/"+Profile+"/"+Name
-    if os.path.exists(NewSavePath) :        
-        os.chmod(NewSavePath,stat.S_IWUSR)
+    NewSavePath = os.path.join(AllSavePath, Profile, Name)
+    if os.path.exists(NewSavePath):
+        os.chmod(NewSavePath, stat.S_IWUSR)
         shutil.rmtree(NewSavePath)
-    shutil.copytree(CurrentSavePath,NewSavePath,dirs_exist_ok=True)
+    shutil.copytree(CurrentSavePath, NewSavePath, dirs_exist_ok=True)
     return True
 
-def DuplicateSave(Name,NameOfCopy,Profile):
+def DuplicateSave(Name, NameOfCopy, Profile):
     if Profile == "":
         return False
-    OldSavePath = AllSavePath +"/"+Profile+"/"+Name
-    NewSavePath = AllSavePath +"/"+Profile+"/"+NameOfCopy
-    if os.path.exists(NewSavePath) :        
-        os.chmod(NewSavePath,stat.S_IWUSR)
+    OldSavePath = os.path.join(AllSavePath, Profile, Name)
+    NewSavePath = os.path.join(AllSavePath, Profile, NameOfCopy)
+    if os.path.exists(NewSavePath):
+        os.chmod(NewSavePath, stat.S_IWUSR)
         shutil.rmtree(NewSavePath)
-    shutil.copytree(OldSavePath,NewSavePath,dirs_exist_ok=True)
+    shutil.copytree(OldSavePath, NewSavePath, dirs_exist_ok=True)
     return True
 
-def RemoveSave(Name,Profile):
+def RemoveSave(Name, Profile):
     if Profile == "":
         return False
-    RemovedSavePath = AllSavePath +"/"+Profile+"/"+Name
-    os.chmod(RemovedSavePath,stat.S_IWUSR)
+    RemovedSavePath = os.path.join(AllSavePath, Profile, Name)
+    os.chmod(RemovedSavePath, stat.S_IWUSR)
     shutil.rmtree(RemovedSavePath)
     return True
 
-def RenameSave(OldName,NewName,Profile):
+def RenameSave(OldName, NewName, Profile):
     if Profile == "":
         return False
-    OldNamePath = AllSavePath +"/"+Profile+"/"+OldName
-    NewNamePath = AllSavePath +"/"+Profile+"/"+NewName
-    os.rename(OldNamePath,NewNamePath)
+    OldNamePath = os.path.join(AllSavePath, Profile, OldName)
+    NewNamePath = os.path.join(AllSavePath, Profile, NewName)
+    os.rename(OldNamePath, NewNamePath)
     return True
 
-def LoadSave(Name,Profile):
+def LoadSave(Name, Profile):
     if Profile == "":
         return False
-    LoadedSavePath = AllSavePath +"/"+Profile+"/"+Name
+    LoadedSavePath = os.path.join(AllSavePath, Profile, Name)
     if os.path.exists(CurrentSavePath):
         for i in os.listdir(CurrentSavePath):
-            if i=="Backup":
-                for j in os.listdir(CurrentSavePath +"/"+i):
-                   os.remove(CurrentSavePath +"/"+i+"/"+j) 
+            path = os.path.join(CurrentSavePath, i)
+            if i == "Backup":
+                for j in os.listdir(path):
+                    os.remove(os.path.join(path, j))
             else:
-                os.remove(CurrentSavePath +"/"+i)
-    shutil.copytree(LoadedSavePath,CurrentSavePath,dirs_exist_ok=True)
+                os.remove(path)
+    shutil.copytree(LoadedSavePath, CurrentSavePath, dirs_exist_ok=True)
     return True
 
 def GetListOfSave(Profile):
-    return os.listdir(AllSavePath+"/"+Profile)
+    return os.listdir(os.path.join(AllSavePath, Profile))
 
 def GetListOfProfile():
     return os.listdir(AllSavePath)
@@ -72,40 +75,35 @@ def GetListOfProfile():
 def CreateProfile(Profile):
     if Profile == "":
         return False
-    NewProfilePath = AllSavePath +"/"+Profile
-    if os.path.exists(NewProfilePath) :
+    NewProfilePath = os.path.join(AllSavePath, Profile)
+    if os.path.exists(NewProfilePath):
         return "Profile already exist"
-    os.makedirs(NewProfilePath,exist_ok=True)
+    os.makedirs(NewProfilePath, exist_ok=True)
     return True
 
 def DeleteProfile(Profile):
     if Profile == "":
         return False
-    RemovedprofilePath = AllSavePath +"/"+Profile
-    for root,dirs,files in os.walk(RemovedprofilePath):
-        os.chmod(root,stat.S_IWUSR)
+    RemovedProfilePath = os.path.join(AllSavePath, Profile)
+    for root, dirs, files in os.walk(RemovedProfilePath):
+        os.chmod(root, stat.S_IWUSR)
         for d in dirs:
-            if d== "Backup":
-                pass
-            else:
-                dirsPath = RemovedprofilePath + "/" + d
-                for i in os.listdir(dirsPath):
-                    if i=="Backup":
-                        os.chmod(dirsPath+"/"+i,stat.S_IWUSR)
-                os.chmod(dirsPath,stat.S_IWUSR)
-    shutil.rmtree(RemovedprofilePath)
+            if d == "Backup":
+                continue
+            dirsPath = os.path.join(RemovedProfilePath, d)
+            for i in os.listdir(dirsPath):
+                if i == "Backup":
+                    os.chmod(os.path.join(dirsPath, i), stat.S_IWUSR)
+            os.chmod(dirsPath, stat.S_IWUSR)
+    shutil.rmtree(RemovedProfilePath)
     return True
 
 def DuplicateProfile(Profile, NameOfCopy):
-    profilePath = AllSavePath +"/"+Profile
-    CopyPath = AllSavePath +"/"+NameOfCopy
-    shutil.copytree(profilePath,CopyPath,dirs_exist_ok=True)
+    profilePath = os.path.join(AllSavePath, Profile)
+    CopyPath = os.path.join(AllSavePath, NameOfCopy)
+    shutil.copytree(profilePath, CopyPath, dirs_exist_ok=True)
 
 def RenameProfile(Profile, NewName):
-    OldProfilePath = AllSavePath +"/"+Profile
-    NewProfilePath = AllSavePath +"/"+NewName
-    os.rename(OldProfilePath,NewProfilePath)
-
-    
-
-
+    OldProfilePath = os.path.join(AllSavePath, Profile)
+    NewProfilePath = os.path.join(AllSavePath, NewName)
+    os.rename(OldProfilePath, NewProfilePath)

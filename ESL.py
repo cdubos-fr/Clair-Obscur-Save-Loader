@@ -172,7 +172,9 @@ class MainWindow(QMainWindow):
         name = self.currentProfile()
         if self.confirmAction("Warning!", f"You will delete {name} Profile", "Are you sure?"):
             functionForSave.DeleteProfile(name)
-            self.qcombo.removeItem(self.qcombo.currentIndex())
+            self.qcombo.clear()
+            self.qcombo.addItems(functionForSave.GetListOfProfile())
+            self.qcombo.setCurrentIndex(-1)
             self.listwidget.clear()
             self.showMessage(f"{name} has been successfully deleted")
 
