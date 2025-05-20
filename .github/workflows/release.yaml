@@ -27,7 +27,7 @@ jobs:
           changelog_increment_filename: body.md
 
       - name: Create Release
-        id: create_release
+        id: create-release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ env.REVISION }}
@@ -38,7 +38,7 @@ jobs:
 
   build-release:
     name: Build Release
-    needs: create_release
+    needs: create-release
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -79,7 +79,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.create_release.outputs.tag-name }}
+          tag_name: ${{ needs.create-release.outputs.tag-name }}
           files: dist/ESL_${{ matrix.release_suffix }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
