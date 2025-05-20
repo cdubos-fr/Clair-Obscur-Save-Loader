@@ -22,10 +22,10 @@ jobs:
     - name: Install dependencies
       run: |
         pip install tox
-        just devenv
+        just --shell bash devenv
     - name: Run Validation
       run: |
-        just check
+        just --shell bash check
 
   check-build:
     name: Check build
@@ -39,7 +39,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install tox
-        just devenv
+        just --shell bash devenv
     - name: Build
       run: |
         just build
