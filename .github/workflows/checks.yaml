@@ -23,6 +23,7 @@ jobs:
       run: |
         pip install tox
         just --shell bash devenv
+        source .venv/bin/activate
     - name: Run Validation
       run: |
         just --shell bash check
@@ -40,6 +41,7 @@ jobs:
       run: |
         pip install tox
         just --shell bash devenv
+        source .venv/bin/activate
     - name: Build
       run: |
         just build
