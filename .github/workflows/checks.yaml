@@ -23,7 +23,7 @@ jobs:
         python-version: '3.13'
     - name: Install dependencies
       run: |
-        pip install tox
+        pip install tox pre-commit
         just --shell bash devenv
         source .venv/bin/activate
     - name: Run Validation
@@ -43,7 +43,7 @@ jobs:
         python-version: '3.13'
     - name: Install dependencies
       run: |
-        pip install tox
+        pip install tox pre-commit
         just --shell bash devenv
         source .venv/bin/activate
     - name: Build
