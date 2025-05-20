@@ -48,4 +48,4 @@ jobs:
         source .venv/bin/activate
     - name: Build
       run: |
-        just build
+        just --shell bash build
