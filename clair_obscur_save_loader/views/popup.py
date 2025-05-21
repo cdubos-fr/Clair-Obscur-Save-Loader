@@ -11,4 +11,4 @@ class PopUpComponent(QLabel):
 
         # Popup message label
         self.setFont(QFont('Helvetica', 15))
-        self.setAlignment(Qt.AlignHCenter | Qt.AlignTop)  # type: ignore
+        self.setAlignment(Qt.AlignHCenter | Qt.AlignTop)

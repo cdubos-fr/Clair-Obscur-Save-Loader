@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtWidgets import QMenu
 from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtWidgets import QWidget
 
 from clair_obscur_save_loader.definitions import Color
 from clair_obscur_save_loader.definitions import Messages
@@ -312,4 +311,4 @@ class ProfileController(QObject):
             action.triggered.connect(method)
             menu.addAction(action)
 
-        menu.exec_(cast('QWidget', self._save_view.viewport()).mapToGlobal(position))
+        menu.exec_(self._save_view.viewport().mapToGlobal(position))

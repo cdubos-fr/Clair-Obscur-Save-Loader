@@ -11,7 +11,7 @@ class SaveComponent(QListWidget):
         self.root = parent
 
         # Save list and context menu
-        self.setContextMenuPolicy(Qt.CustomContextMenu)  # type: ignore
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
 
         # Save action buttons
         self.import_button = QPushButton('Import Savestate', self)

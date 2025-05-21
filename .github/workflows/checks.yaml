@@ -16,16 +16,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: extractions/setup-just@v3
-    - uses: actions/setup-python@v5
+    - name: Setup PDM
+      uses: pdm-project/setup-pdm@v4
       with:
         python-version: '3.13'
     - name: Install dependencies
       run: |
-        pip install tox
-        just devenv
+        pip install tox pre-commit
+        just --shell bash devenv
     - name: Run Validation
       run: |
-        just check
+        source .venv/bin/activate
+        just --shell bash check
 
   check-build:
     name: Check build
@@ -33,13 +35,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: extractions/setup-just@v3
-    - uses: actions/setup-python@v5
+    - name: Setup PDM
+      uses: pdm-project/setup-pdm@v4
       with:
         python-version: '3.13'
     - name: Install dependencies
       run: |
-        pip install tox
-        just devenv
+        pip install tox pre-commit
+        just --shell bash devenv
     - name: Build
       run: |
-        just build
+        source .venv/bin/activate
+        just --shell bash build

@@ -1,10 +1,8 @@
 import os
 import sys
-from typing import cast
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtGui import QScreen
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QMainWindow
@@ -76,7 +74,7 @@ class MainWindow(QMainWindow):
         layout.setSpacing(5)
 
         # Center window on screen
-        screen = cast('QScreen', QApplication.primaryScreen()).geometry()
+        screen = QApplication.primaryScreen().geometry()
         self.move((screen.width() - self.width()) // 2, (screen.height() - self.height()) // 2)
 
         self.label = LabelComponent(self)
@@ -88,7 +86,7 @@ class MainWindow(QMainWindow):
         # Layout positioning
         layout.addWidget(self.label, 0, 0)
         layout.addWidget(self.profile, 0, 1)
-        layout.addLayout(self.profile.vbox_profile, 1, 1, alignment=Qt.AlignTop)  # type: ignore
+        layout.addLayout(self.profile.vbox_profile, 1, 1, alignment=Qt.AlignTop)
         layout.addWidget(self.save, 1, 0)
         layout.addLayout(self.save.h_layout, 2, 0)
         layout.addWidget(self.popup, 3, 0)

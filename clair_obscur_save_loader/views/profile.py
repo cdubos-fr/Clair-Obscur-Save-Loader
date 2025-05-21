@@ -1,8 +1,5 @@
-from typing import cast
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QComboBox
-from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
@@ -17,7 +14,7 @@ class ProfileComponent(QComboBox):
 
         # Profile selection
         self.setEditable(True)
-        edit = cast('QLineEdit', self.lineEdit())
+        edit = self.lineEdit()
 
         edit.setReadOnly(True)
         edit.setPlaceholderText('Select')
@@ -32,7 +29,7 @@ class ProfileComponent(QComboBox):
             'Rename Profile',
         ]:
             self.buttons[label] = QPushButton(label, self.root)
-            self.vbox_profile.addWidget(self.buttons[label], alignment=Qt.AlignTop)  # type: ignore
+            self.vbox_profile.addWidget(self.buttons[label], alignment=Qt.AlignTop)
 
     def currentProfile(self) -> str:
         return self.currentText()

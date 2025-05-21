@@ -13,4 +13,4 @@ class LabelComponent(QLabel):
         self.root = parent
         self.setFont(QFont('Helvetica', 15))
         self.setStyleSheet(f'color: {Color.INFO}')
-        self.setAlignment(Qt.AlignHCenter | Qt.AlignTop)  # type: ignore
+        self.setAlignment(Qt.AlignHCenter | Qt.AlignTop)

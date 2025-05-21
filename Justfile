@@ -47,9 +47,8 @@ clean:
     @find . -type d -name result -exec rm -rf {} +
     @find . -type d -name __pycache__ -exec rm -rf {} +
 
-pdm-lock-params := if path_exists("pdm.lock") == "true" { "sync" } else { "lock -G :all" }
 lock:
-    @pdm {{ pdm-lock-params }}
+    @pdm lock -G :all
 
 # Build package
 build:
