@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "clair-obscur-save-loader"
 description = "A tools to quickly update your Expedition 33 save with some profile to organize easily."
-version = "0.3.0"
+version = "0.4.0"
 authors = [{name = "Vincent Coppe"}, {name = "Clément Dubos", email = "contact@cdubos.fr"}]
 readme = "README.md"
 requires-python = "<3.14,>= 3.13"
@@ -110,7 +110,7 @@ format.preview = true
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.3.0"
+version = "0.4.0"
 version_files = [
     "pyproject.toml:version",
     "clair_obscur_save_loader/__init__.py"
